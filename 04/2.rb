@@ -1,7 +1,11 @@
+# Algorithm:
+# Until no more cells are removed:
+#   loop across each row of the map, determining the ones that are accessible
+#   remove the accessible ones
 
 # Get the accessible rolls in `this` row.
 def accessible_rolls prev, this, succ
-  removables = []
+  accessible = []
 
   this.each_char.with_index do |c, i|
     next unless c == "@"
@@ -16,9 +20,9 @@ def accessible_rolls prev, this, succ
       count += 1 if succ != nil and succ[x] == "@"
     end
 
-    removables << i if count < 4
+    accessible << i if count < 4
   end
-  removables
+  accessible
 end
 
 # Remove any accessible rolls from the map, returning the number of rolls removed.

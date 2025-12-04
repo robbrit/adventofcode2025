@@ -1,3 +1,7 @@
+# Algorithm:
+# Scan through the lines of the map, looking for accessible cells.
+# We only need the previous, current, and next rows to determine which cells are accessible, so we
+# discard any older rows as we read through the map.
 
 # Get the number of accessible rolls in `this` row.
 def accessible_rolls prev, this, succ
@@ -25,24 +29,18 @@ prev, this = nil, nil
 total = 0
 
 ARGF.each.with_index do |line, idx|
+  # We don't process each line when we see it, instead we store it and then process it when
+  # we see the next line.
   line.chomp!
 
-  case idx
-  when 0
-    prev = line
-    next
-  when 1
-    this = line
-    total += accessible_rolls(nil, prev, line)
-    next
-  else
-    total += accessible_rolls(prev, this, line)
-  end
+  # On the first row we just store it and move on.
+  this = line and next if idx == 0
 
+  total += accessible_rolls(prev, this, line)
   prev, this = this, line
 end
 
-# Process the last row too
+# We still have to do the last line.
 total += accessible_rolls(prev, this, nil)
 
 puts total
